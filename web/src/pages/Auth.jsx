@@ -14,7 +14,7 @@ import {
 } from 'lucide-react';
 import logo from '../assets/logo.png';
 
-const Auth = () => {
+const Auth = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -132,6 +132,11 @@ const Auth = () => {
           localStorage.setItem("userRole", role);
           localStorage.setItem("userEmail", formData.email);
           
+          // Call the onLogin callback
+          if (onLogin) {
+            onLogin();
+          }
+          
           alert(`Login successful! Welcome ${formData.email}`);
           navigate('/dashboard');
         } else {
@@ -155,7 +160,7 @@ const Auth = () => {
           setFormData({
             firstName: '',
             lastName: '',
-            email: formData.email, // Keep email for login
+            email: formData.email,
             password: '',
             confirmPassword: ''
           });

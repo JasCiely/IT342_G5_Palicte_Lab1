@@ -1,0 +1,85 @@
+.dashboard-header {
+  background: #f8f7f4; /* Matches the slight off-white/cream background */
+  padding: 2rem 4rem;
+  border-bottom: 1px solid #eaeaea;
+  font-family: 'Inter', -apple-system, sans-serif;
+}
+
+.dashboard-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.welcome-section h1 {
+  /* Serif font is key to the design look */
+  font-family: 'Playfair Display', Georgia, serif; 
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0 0 0.25rem 0;
+}
+
+.welcome-section .subtitle {
+  font-size: 1rem;
+  color: #666666;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+/* Primary Button - Burgundy Style */
+.btn-browse-outfits {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: #6b2d39; /* The burgundy color from the image */
+  color: white;
+  border: none;
+  transition: opacity 0.2s ease;
+}
+
+.btn-browse-outfits:hover {
+  background: #5a2530;
+}
+
+/* Secondary Button - Outlined Style */
+.btn-logout {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  background: white;
+  color: #333333;
+  border: 1px solid #d1d1d1;
+  transition: all 0.2s ease;
+}
+
+.btn-logout:hover {
+  background: #fdfdfd;
+  border-color: #999;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .dashboard-header {
+    padding: 1.5rem;
+  }
+  .dashboard-header-content {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+}
