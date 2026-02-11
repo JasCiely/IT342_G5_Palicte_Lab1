@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import DashboardHeader from '../components/DashboardContent/DashboardHeader';
 import DashboardNav from '../components/DashboardContent/DashboardNav'; 
 import StatsGrid from '../components/DashboardContent/StatsGrid';
+import RecentBookings from '../components/DashboardContent/RecentBookings';
 
 const Dashboard = ({ onLogout }) => {
   // Get user info from localStorage
@@ -32,7 +33,12 @@ const Dashboard = ({ onLogout }) => {
   const renderContent = () => {
     switch(activeTab) {
       case 'Overview':
-        return <StatsGrid />;
+        return (
+          <>
+            <StatsGrid />
+            <RecentBookings />
+          </>
+        );
       
       case 'My Bookings':
         return (
@@ -84,7 +90,12 @@ const Dashboard = ({ onLogout }) => {
         );
       
       default:
-        return <StatsGrid />;
+        return (
+          <>
+            <StatsGrid />
+            <RecentBookings />
+          </>
+        );
     }
   };
 
@@ -96,7 +107,7 @@ const Dashboard = ({ onLogout }) => {
         onLogout={handleLogout} 
       />
 
-      {/* 2. The Navigation Bar - Pass props correctly */}
+      {/* 2. The Navigation Bar */}
       <DashboardNav 
         activeTab={activeTab} 
         onTabChange={handleTabChange} 
