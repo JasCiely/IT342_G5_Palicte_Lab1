@@ -1,10 +1,12 @@
 .dashboard-nav-container {
-  background: #f8f7f4; /* Matching the very light cream/white background */
-  padding: 0.5rem 4rem 1.5rem 4rem; /* Top padding small to sit close to header */
+  background: #f8f7f4;
+  /* Side padding must match .dashboard-header */
+  padding: 0.5rem 4rem 1.5rem 4rem; 
 }
 
 .dashboard-nav-content {
-  max-width: 1300px;
+  /* Must match .dashboard-header-content exactly */
+  max-width: 1400px;
   margin: 0 auto;
   display: flex;
   gap: 1rem;
@@ -13,7 +15,6 @@
 
 .nav-item {
   display: flex;
-
   align-items: center;
   gap: 0.5rem;
   padding: 0.6rem 1rem;
@@ -27,13 +28,17 @@
   background: transparent;
 }
 
+/* FIX: This pulls the first item left to align with the text above */
+.nav-item:first-child {
+  margin-left: -1rem;
+}
+
 .nav-item svg {
   width: 16px;
   height: 16px;
   color: #888;
 }
 
-/* The "Overview" active state from your image */
 .nav-item.active {
   background: #ffffff;
   color: #1a1a1a;
@@ -49,6 +54,9 @@
 @media (max-width: 768px) {
   .dashboard-nav-container {
     padding: 0.5rem 1.5rem 1rem 1.5rem;
-    overflow-x: auto; /* Allows swiping on mobile */
+    overflow-x: auto;
+  }
+  .nav-item:first-child {
+    margin-left: 0; /* Reset for mobile spacing */
   }
 }
