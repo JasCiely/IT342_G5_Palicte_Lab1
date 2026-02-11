@@ -4,6 +4,7 @@ import DashboardHeader from '../components/DashboardContent/DashboardHeader';
 import DashboardNav from '../components/DashboardContent/DashboardNav'; 
 import StatsGrid from '../components/DashboardContent/StatsGrid';
 import RecentBookings from '../components/DashboardContent/RecentBookings';
+import PopularPicks from '../components/DashboardContent/PopularPicks'; // Fixed spelling
 
 const Dashboard = ({ onLogout }) => {
   // Get user info from localStorage
@@ -37,6 +38,7 @@ const Dashboard = ({ onLogout }) => {
           <>
             <StatsGrid />
             <RecentBookings />
+            <PopularPicks /> {/* Fixed spelling - now shows on Overview tab */}
           </>
         );
       
@@ -94,6 +96,7 @@ const Dashboard = ({ onLogout }) => {
           <>
             <StatsGrid />
             <RecentBookings />
+            <AvailableOutfits /> {/* Fixed spelling */}
           </>
         );
     }
