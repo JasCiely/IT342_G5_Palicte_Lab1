@@ -1,12 +1,12 @@
 import React from 'react';
 import DashboardHeader from '../components/DashboardContent/DashboardHeader';
+import DashboardNav from '../components/DashboardContent/DashboardNav'; // Import the new nav
 
 const Dashboard = ({ onLogout }) => {
   // Get user info from localStorage
   const userEmail = localStorage.getItem("userEmail") || "User";
   
-  // Try to get firstName from localStorage first (set by backend during login)
-  // If not available, fall back to extracting from email
+  // Try to get firstName from localStorage first
   const firstName = localStorage.getItem("firstName") || 
                     localStorage.getItem("userFirstName") || 
                     userEmail.split('@')[0] || 
@@ -19,17 +19,20 @@ const Dashboard = ({ onLogout }) => {
   };
 
   return (
-    <div className="dashboard">
+    <div className="dashboard" style={{ background: '#fdfdfb', minHeight: '100vh' }}>
+      {/* 1. The Top Header */}
       <DashboardHeader 
-        userName={firstName}  // Pass only the first name
+        userName={firstName} 
         onLogout={handleLogout} 
       />
-      <div className="dashboard-content">
-        <h2>Welcome to Your Dashboard</h2>
-        <p>You are logged in as: {userEmail}</p>
-        <p>Your role: {localStorage.getItem("userRole") || "USER"}</p>
-        <p>Manage your bookings and explore outfits from here!</p>
-      </div>
+
+      {/* 2. The New Navigation Bar */}
+      <DashboardNav />
+
+      {/* 3. Dashboard Content Area (Where your school/event info will go) */}
+      <main className="dashboard-body" style={{ padding: '0 4rem' }}>
+        {/* Content goes here */}
+      </main>
     </div>
   );
 };
