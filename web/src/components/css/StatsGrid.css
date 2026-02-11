@@ -1,0 +1,241 @@
+.stats-container {
+  background: #f8f7f4;
+  padding: 0.25rem 4rem 1.5rem 4rem;
+}
+
+.stats-header {
+  max-width: 1400px;
+  margin: 0 auto 0.75rem auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.stats-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #2c2c2c;
+  margin: 0;
+  letter-spacing: -0.01em;
+  position: relative;
+}
+
+.stats-title::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 24px;
+  height: 1.5px;
+  background: #6b2d39;
+  border-radius: 2px;
+}
+
+.stats-period {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  color: #8a8a8a;
+  background: rgba(107, 45, 57, 0.04);
+  padding: 0.25rem 0.75rem;
+  border-radius: 16px;
+  font-weight: 450;
+  letter-spacing: 0.01em;
+}
+
+.stats-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+
+.stat-card {
+  background: #ffffff;
+  padding: 0.9rem 1.25rem;
+  border-radius: 10px;
+  border: 1px solid #ededed;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
+  height: 95px;
+  justify-content: space-between;
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 0;
+  background: #6b2d39;
+  transition: height 0.15s ease;
+}
+
+.stat-card:hover {
+  border-color: #dcdcdc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  transform: translateY(-1px);
+}
+
+.stat-card:hover::before {
+  height: 100%;
+}
+
+.stat-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.stat-title-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.stat-label {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #6a6a6a;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.stat-trend {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 450;
+  padding: 0.15rem 0.4rem;
+  border-radius: 10px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.15rem;
+  width: fit-content;
+}
+
+.stat-trend-up {
+  background: rgba(34, 197, 94, 0.08);
+  color: #15803d;
+}
+
+.stat-trend-down {
+  background: rgba(239, 68, 68, 0.08);
+  color: #b91c1c;
+}
+
+.stat-trend-neutral {
+  background: rgba(100, 116, 139, 0.08);
+  color: #475569;
+}
+
+.stat-icon-wrapper {
+  background: rgba(107, 45, 57, 0.04);
+  padding: 0.4rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stat-icon {
+  color: #6b2d39;
+  width: 14px;
+  height: 14px;
+  stroke-width: 1.75;
+}
+
+.icon-gold {
+  color: #b68b40;
+}
+
+.stat-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.stat-value-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+}
+
+.stat-value {
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+
+.stat-footer-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.stat-footer {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.65rem;
+  color: #8f8f8f;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+}
+
+.stat-progress {
+  width: 100%;
+  height: 3px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, #6b2d39, #8e4a54);
+  border-radius: 3px;
+  transition: width 0.4s ease;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+  .stats-container { 
+    padding: 0.25rem 1.5rem 1.5rem 1.5rem; 
+  }
+  
+  .stats-header {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+  
+  .stats-title { 
+    font-size: 1rem; 
+  }
+  
+  .stats-title::after { 
+    width: 20px; 
+  }
+  
+  .stats-content { 
+    grid-template-columns: 1fr; 
+    gap: 0.75rem; 
+  }
+  
+  .stat-card { 
+    height: 95px; 
+    padding: 0.8rem 1.25rem;
+  }
+  
+  .stat-value { 
+    font-size: 1.3rem; 
+  }
+}
