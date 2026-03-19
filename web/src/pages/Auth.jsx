@@ -30,13 +30,13 @@ const Auth = ({ onLogin }) => {
   
   const navigate = useNavigate();
 
-  // Create axios instance
+  // Create axios instance with credentials enabled
   const api = axios.create({
     baseURL: 'http://localhost:8080/api',
     headers: {
       'Content-Type': 'application/json',
     },
-    withCredentials: true
+    withCredentials: true // CRITICAL: Enable cookies/sessions
   });
 
   const handleChange = (e) => {
@@ -123,24 +123,19 @@ const Auth = ({ onLogin }) => {
           password: formData.password
         });
         
-        if (response.data && response.data.startsWith("Login Success")) {
-          const parts = response.data.split(":");
-          const role = parts[1]?.trim() || "USER";
+        // Response is now a UserResponse object
+        if (response.data && response.data.email) {
+          console.log("Login successful:", response.data);
           
-          // Store authentication info
-          localStorage.setItem("isAuthenticated", "true");
-          localStorage.setItem("userRole", role);
-          localStorage.setItem("userEmail", formData.email);
-          
-          // Call the onLogin callback
+          // Call the onLogin callback with user data
           if (onLogin) {
-            onLogin();
+            onLogin(response.data);
           }
           
-          alert(`Login successful! Welcome ${formData.email}`);
+          alert(`Welcome back, ${response.data.firstName}!`);
           navigate('/dashboard');
         } else {
-          alert(response.data || "Login failed. Please check your credentials.");
+          alert("Login failed. Please check your credentials.");
         }
       } else {
         // REGISTER REQUEST
