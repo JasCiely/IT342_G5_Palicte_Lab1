@@ -256,7 +256,7 @@ const Auth = ({ onLogin }) => {
             <img src={logo} alt="EventWear Logo" className="auth-brand-logo" />
           </div>
           <h1 className="auth-title">
-            {isLaogin ? 'Welcome Back' : 'Create Account'}
+            {isLogin ? 'Welcome Back' : 'Create Account'}
           </h1>
           <p className="auth-subtitle">
             {isLogin 
