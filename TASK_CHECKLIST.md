@@ -59,7 +59,7 @@
 
 ### Documentation
 
-- [x] SRS document with all 5 diagrams (ERD, Use Case, Activity, Class, Sequence) created
+- [x] SRS document with all 5 diagrams (ERD, Use Case, Activity, Class, Sequence) created — `d306f0c`
 
 ---
 
