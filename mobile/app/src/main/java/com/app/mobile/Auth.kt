@@ -1,5 +1,6 @@
 package com.app.mobile
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
@@ -172,9 +173,9 @@ class Auth : AppCompatActivity() {
             val email    = etSignInEmail.text.toString().trim()
             val password = etSignInPassword.text.toString().trim()
             when {
-                email.isEmpty()        -> Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
-                !isValidEmail(email)   -> Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
-                password.isEmpty()     -> Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show()
+                email.isEmpty()      -> Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
+                !isValidEmail(email) -> Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
+                password.isEmpty()   -> Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show()
                 else -> {
                     btnSignIn.isEnabled = false
                     btnSignIn.text = "SIGNING IN..."
@@ -211,12 +212,12 @@ class Auth : AppCompatActivity() {
             val password  = etRegPassword.text.toString().trim()
             val confirm   = etConfirmPassword.text.toString().trim()
             when {
-                firstName.isEmpty()    -> Toast.makeText(this, "Please enter your first name", Toast.LENGTH_SHORT).show()
-                lastName.isEmpty()     -> Toast.makeText(this, "Please enter your last name", Toast.LENGTH_SHORT).show()
-                email.isEmpty()        -> Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
-                !isValidEmail(email)   -> Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
-                password.length < 6    -> Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
-                password != confirm    -> Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                firstName.isEmpty()  -> Toast.makeText(this, "Please enter your first name", Toast.LENGTH_SHORT).show()
+                lastName.isEmpty()   -> Toast.makeText(this, "Please enter your last name", Toast.LENGTH_SHORT).show()
+                email.isEmpty()      -> Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
+                !isValidEmail(email) -> Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
+                password.length < 6  -> Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                password != confirm  -> Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 else -> {
                     btnCreateAccount.isEnabled = false
                     btnCreateAccount.text = "CREATING ACCOUNT..."
@@ -253,7 +254,14 @@ class Auth : AppCompatActivity() {
 
         // ── Continue as Guest ─────────────────────────────────────────
         btnGuest.setOnClickListener {
-            Toast.makeText(this, "Continuing as guest...", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, GuestDashboardActivity::class.java))
+            finish()
+        }
+
+        // ── Handle tab intent from GuestDashboardActivity ─────────────
+        when (intent.getStringExtra("TAB")) {
+            "register" -> showCreateAccount()
+            "signin"   -> showSignIn()
         }
     }
 }
