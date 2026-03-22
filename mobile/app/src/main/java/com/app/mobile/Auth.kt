@@ -3,6 +3,7 @@ package com.app.mobile
 import android.os.Bundle
 import android.text.method.HideReturnsTransformationMethod
 import android.text.method.PasswordTransformationMethod
+import android.util.Patterns
 import android.view.View
 import android.widget.EditText
 import android.widget.ImageView
@@ -59,8 +60,41 @@ class Auth : AppCompatActivity() {
         val tvGoToSignIn      = findViewById<TextView>(R.id.tvGoToSignIn)
         val btnGuest          = findViewById<MaterialButton>(R.id.btnContinueAsGuest)
 
+        // ── Email validator ───────────────────────────────────────────
+        fun isValidEmail(email: String): Boolean {
+            return Patterns.EMAIL_ADDRESS.matcher(email).matches()
+        }
+
+        // ── Clear helpers ─────────────────────────────────────────────
+        fun clearSignInForm() {
+            etSignInEmail.text.clear()
+            etSignInPassword.text.clear()
+            isSignInPasswordVisible = false
+            etSignInPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+            ivToggleSignIn.setImageResource(R.drawable.ic_visibility_off)
+        }
+
+        fun clearRegisterForm() {
+            etFirstName.text.clear()
+            etLastName.text.clear()
+            etRegEmail.text.clear()
+            etRegPassword.text.clear()
+            etConfirmPassword.text.clear()
+            isRegPasswordVisible = false
+            isConfirmPasswordVisible = false
+            etRegPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+            etConfirmPassword.transformationMethod = PasswordTransformationMethod.getInstance()
+            ivToggleRegPwd.setImageResource(R.drawable.ic_visibility_off)
+            ivToggleConfPwd.setImageResource(R.drawable.ic_visibility_off)
+        }
+
         // ── Tab switcher ──────────────────────────────────────────────
-        fun showSignIn() {
+        fun showSignIn(prefillEmail: String? = null) {
+            clearSignInForm()
+            prefillEmail?.let {
+                etSignInEmail.setText(it)
+                etSignInPassword.requestFocus()
+            }
             layoutSignIn.visibility = View.VISIBLE
             layoutCreateAcc.visibility = View.GONE
             tvTitle.text = "Welcome Back"
@@ -76,6 +110,7 @@ class Auth : AppCompatActivity() {
         }
 
         fun showCreateAccount() {
+            clearRegisterForm()
             layoutSignIn.visibility = View.GONE
             layoutCreateAcc.visibility = View.VISIBLE
             tvTitle.text = "Create Account"
@@ -137,8 +172,9 @@ class Auth : AppCompatActivity() {
             val email    = etSignInEmail.text.toString().trim()
             val password = etSignInPassword.text.toString().trim()
             when {
-                email.isEmpty()    -> Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
-                password.isEmpty() -> Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show()
+                email.isEmpty()        -> Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
+                !isValidEmail(email)   -> Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
+                password.isEmpty()     -> Toast.makeText(this, "Please enter your password", Toast.LENGTH_SHORT).show()
                 else -> {
                     btnSignIn.isEnabled = false
                     btnSignIn.text = "SIGNING IN..."
@@ -147,6 +183,7 @@ class Auth : AppCompatActivity() {
                         onSuccess = { userId, firstName, lastName, role ->
                             runOnUiThread {
                                 SessionManager.saveUser(this, userId, firstName, lastName, email, role)
+                                clearSignInForm()
                                 Toast.makeText(this, "Welcome back, $firstName!", Toast.LENGTH_SHORT).show()
                                 btnSignIn.isEnabled = true
                                 btnSignIn.text = "SIGN IN  →"
@@ -174,11 +211,12 @@ class Auth : AppCompatActivity() {
             val password  = etRegPassword.text.toString().trim()
             val confirm   = etConfirmPassword.text.toString().trim()
             when {
-                firstName.isEmpty()  -> Toast.makeText(this, "Please enter your first name", Toast.LENGTH_SHORT).show()
-                lastName.isEmpty()   -> Toast.makeText(this, "Please enter your last name", Toast.LENGTH_SHORT).show()
-                email.isEmpty()      -> Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
-                password.length < 6  -> Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
-                password != confirm  -> Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
+                firstName.isEmpty()    -> Toast.makeText(this, "Please enter your first name", Toast.LENGTH_SHORT).show()
+                lastName.isEmpty()     -> Toast.makeText(this, "Please enter your last name", Toast.LENGTH_SHORT).show()
+                email.isEmpty()        -> Toast.makeText(this, "Please enter your email", Toast.LENGTH_SHORT).show()
+                !isValidEmail(email)   -> Toast.makeText(this, "Please enter a valid email address", Toast.LENGTH_SHORT).show()
+                password.length < 6    -> Toast.makeText(this, "Password must be at least 6 characters", Toast.LENGTH_SHORT).show()
+                password != confirm    -> Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 else -> {
                     btnCreateAccount.isEnabled = false
                     btnCreateAccount.text = "CREATING ACCOUNT..."
@@ -189,7 +227,7 @@ class Auth : AppCompatActivity() {
                                 Toast.makeText(this, "Account created! Please sign in.", Toast.LENGTH_LONG).show()
                                 btnCreateAccount.isEnabled = true
                                 btnCreateAccount.text = "CREATE ACCOUNT  →"
-                                showSignIn()
+                                showSignIn(prefillEmail = email)
                             }
                         },
                         onError = { message ->
@@ -204,19 +242,9 @@ class Auth : AppCompatActivity() {
             }
         }
 
-        // ── Clear forms ───────────────────────────────────────────────
-        btnClearSignIn.setOnClickListener {
-            etSignInEmail.text.clear()
-            etSignInPassword.text.clear()
-        }
-
-        btnClearRegister.setOnClickListener {
-            etFirstName.text.clear()
-            etLastName.text.clear()
-            etRegEmail.text.clear()
-            etRegPassword.text.clear()
-            etConfirmPassword.text.clear()
-        }
+        // ── Clear form buttons ────────────────────────────────────────
+        btnClearSignIn.setOnClickListener { clearSignInForm() }
+        btnClearRegister.setOnClickListener { clearRegisterForm() }
 
         // ── Forgot Password ───────────────────────────────────────────
         tvForgotPassword.setOnClickListener {
