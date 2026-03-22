@@ -249,8 +249,6 @@ const Auth = ({ onLogin }) => {
           onClick={() => navigate('/')}
           disabled={isLoading}
         >
-          <ArrowLeft size={16} />
-          <span>Back to Home</span>
         </button>
 
         <div className="auth-header">
