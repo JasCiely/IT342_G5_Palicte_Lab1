@@ -4,8 +4,8 @@ import android.content.Context
 
 object SessionManager {
 
-    private const val PREF_NAME  = "auth_prefs"
-    private const val KEY_ID         = "user_id"
+    private const val PREF_NAME     = "auth_prefs"
+    private const val KEY_ID        = "user_id"
     private const val KEY_FIRST_NAME = "first_name"
     private const val KEY_LAST_NAME  = "last_name"
     private const val KEY_EMAIL      = "email"
@@ -28,25 +28,29 @@ object SessionManager {
             .apply()
     }
 
-    fun isLoggedIn(context: Context): Boolean {
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    fun isLoggedIn(context: Context): Boolean =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             .getLong(KEY_ID, -1L) != -1L
-    }
 
-    fun getUserId(context: Context): Long {
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    fun getUserId(context: Context): Long =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             .getLong(KEY_ID, -1L)
-    }
 
-    fun getFirstName(context: Context): String? {
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    fun getFirstName(context: Context): String? =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             .getString(KEY_FIRST_NAME, null)
-    }
 
-    fun getRole(context: Context): String? {
-        return context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+    fun getLastName(context: Context): String? =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .getString(KEY_LAST_NAME, null)
+
+    fun getEmail(context: Context): String? =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
+            .getString(KEY_EMAIL, null)
+
+    fun getRole(context: Context): String? =
+        context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
             .getString(KEY_ROLE, null)
-    }
 
     fun clearSession(context: Context) {
         context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)

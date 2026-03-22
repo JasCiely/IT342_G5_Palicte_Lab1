@@ -26,40 +26,42 @@ class Auth : AppCompatActivity() {
 
         // Skip login if already logged in
         if (SessionManager.isLoggedIn(this)) {
-            // TODO: startActivity(Intent(this, HomeActivity::class.java))
-            // finish()
-            // return
+            val intent = Intent(this, DashboardActivity::class.java)
+            intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            startActivity(intent)
+            finish()
+            return
         }
 
         // Views
-        val tvSignInTab       = findViewById<TextView>(R.id.tvSignInTab)
-        val tvCreateAccTab    = findViewById<TextView>(R.id.tvCreateAccountTab)
-        val layoutSignIn      = findViewById<LinearLayout>(R.id.layoutSignIn)
-        val layoutCreateAcc   = findViewById<LinearLayout>(R.id.layoutCreateAccount)
-        val tvTitle           = findViewById<TextView>(R.id.tvTitle)
-        val tvSubtitle        = findViewById<TextView>(R.id.tvSubtitle)
+        val tvSignInTab        = findViewById<TextView>(R.id.tvSignInTab)
+        val tvCreateAccTab     = findViewById<TextView>(R.id.tvCreateAccountTab)
+        val layoutSignIn       = findViewById<LinearLayout>(R.id.layoutSignIn)
+        val layoutCreateAcc    = findViewById<LinearLayout>(R.id.layoutCreateAccount)
+        val tvTitle            = findViewById<TextView>(R.id.tvTitle)
+        val tvSubtitle         = findViewById<TextView>(R.id.tvSubtitle)
 
         // Sign In fields
-        val etSignInEmail     = findViewById<EditText>(R.id.etSignInEmail)
-        val etSignInPassword  = findViewById<EditText>(R.id.etSignInPassword)
-        val ivToggleSignIn    = findViewById<ImageView>(R.id.ivToggleSignInPassword)
-        val btnSignIn         = findViewById<MaterialButton>(R.id.btnSignIn)
-        val btnClearSignIn    = findViewById<MaterialButton>(R.id.btnClearSignIn)
-        val tvForgotPassword  = findViewById<TextView>(R.id.tvForgotPassword)
-        val tvGoToSignUp      = findViewById<TextView>(R.id.tvGoToSignUp)
+        val etSignInEmail      = findViewById<EditText>(R.id.etSignInEmail)
+        val etSignInPassword   = findViewById<EditText>(R.id.etSignInPassword)
+        val ivToggleSignIn     = findViewById<ImageView>(R.id.ivToggleSignInPassword)
+        val btnSignIn          = findViewById<MaterialButton>(R.id.btnSignIn)
+        val btnClearSignIn     = findViewById<MaterialButton>(R.id.btnClearSignIn)
+        val tvForgotPassword   = findViewById<TextView>(R.id.tvForgotPassword)
+        val tvGoToSignUp       = findViewById<TextView>(R.id.tvGoToSignUp)
 
         // Register fields
-        val etFirstName       = findViewById<EditText>(R.id.etFirstName)
-        val etLastName        = findViewById<EditText>(R.id.etLastName)
-        val etRegEmail        = findViewById<EditText>(R.id.etRegEmail)
-        val etRegPassword     = findViewById<EditText>(R.id.etRegPassword)
-        val etConfirmPassword = findViewById<EditText>(R.id.etConfirmPassword)
-        val ivToggleRegPwd    = findViewById<ImageView>(R.id.ivToggleRegPassword)
-        val ivToggleConfPwd   = findViewById<ImageView>(R.id.ivToggleConfirmPassword)
-        val btnCreateAccount  = findViewById<MaterialButton>(R.id.btnCreateAccount)
-        val btnClearRegister  = findViewById<MaterialButton>(R.id.btnClearRegister)
-        val tvGoToSignIn      = findViewById<TextView>(R.id.tvGoToSignIn)
-        val btnGuest          = findViewById<MaterialButton>(R.id.btnContinueAsGuest)
+        val etFirstName        = findViewById<EditText>(R.id.etFirstName)
+        val etLastName         = findViewById<EditText>(R.id.etLastName)
+        val etRegEmail         = findViewById<EditText>(R.id.etRegEmail)
+        val etRegPassword      = findViewById<EditText>(R.id.etRegPassword)
+        val etConfirmPassword  = findViewById<EditText>(R.id.etConfirmPassword)
+        val ivToggleRegPwd     = findViewById<ImageView>(R.id.ivToggleRegPassword)
+        val ivToggleConfPwd    = findViewById<ImageView>(R.id.ivToggleConfirmPassword)
+        val btnCreateAccount   = findViewById<MaterialButton>(R.id.btnCreateAccount)
+        val btnClearRegister   = findViewById<MaterialButton>(R.id.btnClearRegister)
+        val tvGoToSignIn       = findViewById<TextView>(R.id.tvGoToSignIn)
+        val btnGuest           = findViewById<MaterialButton>(R.id.btnContinueAsGuest)
 
         // ── Email validator ───────────────────────────────────────────
         fun isValidEmail(email: String): Boolean {
@@ -188,8 +190,11 @@ class Auth : AppCompatActivity() {
                                 Toast.makeText(this, "Welcome back, $firstName!", Toast.LENGTH_SHORT).show()
                                 btnSignIn.isEnabled = true
                                 btnSignIn.text = "SIGN IN  →"
-                                // TODO: startActivity(Intent(this, HomeActivity::class.java))
-                                // finish()
+                                // Navigate to Dashboard
+                                val intent = Intent(this, DashboardActivity::class.java)
+                                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                startActivity(intent)
+                                finish()
                             }
                         },
                         onError = { message ->
