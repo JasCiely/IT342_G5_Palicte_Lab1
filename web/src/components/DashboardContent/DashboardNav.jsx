@@ -1,13 +1,12 @@
-// DashboardNav.js - Make sure this is the ONLY DashboardNav component
 import React from 'react';
 import '../css/DashboardNav.css';
 
-const DashboardNav = ({ activeTab, onTabChange }) => {
+const DashboardNav = ({ activeTab, onTabChange, isGuest = false }) => {
   const navItems = [
-    { name: 'Overview', icon: <CalendarIcon /> },
-    { name: 'My Bookings', icon: <BoxIcon /> },
-    { name: 'Notifications', icon: <BellIcon /> },
-    { name: 'Profile', icon: <UserIcon /> },
+    { name: 'Overview', icon: <CalendarIcon />, guestAllowed: true },
+    { name: 'My Bookings', icon: <BoxIcon />, guestAllowed: false },
+    { name: 'Notifications', icon: <BellIcon />, guestAllowed: false },
+    { name: 'Profile', icon: <UserIcon />, guestAllowed: false },
   ];
 
   return (
@@ -16,11 +15,17 @@ const DashboardNav = ({ activeTab, onTabChange }) => {
         {navItems.map((item) => (
           <button
             key={item.name}
-            className={`nav-item ${activeTab === item.name ? 'active' : ''}`}
+            className={`nav-item ${activeTab === item.name ? 'active' : ''} ${isGuest && !item.guestAllowed ? 'guest-locked' : ''}`}
             onClick={() => onTabChange(item.name)}
           >
             {item.icon}
-            {item.name}
+            <span className="nav-item-text">{item.name}</span>
+            {isGuest && !item.guestAllowed && (
+              <svg className="lock-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0110 0v4"/>
+              </svg>
+            )}
           </button>
         ))}
       </div>

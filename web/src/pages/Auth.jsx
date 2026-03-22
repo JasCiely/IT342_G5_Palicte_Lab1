@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import '../components/css/Auth.css';
 import { 
@@ -15,7 +15,13 @@ import {
 import logo from '../assets/logo.png';
 
 const Auth = ({ onLogin }) => {
-  const [isLogin, setIsLogin] = useState(true);
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Check if we should show signup tab based on navigation state
+  const shouldShowSignup = location.state?.tab === 'signup';
+  
+  const [isLogin, setIsLogin] = useState(!shouldShowSignup); // If signup requested, start with Create Account
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -27,8 +33,15 @@ const Auth = ({ onLogin }) => {
   });
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
-  
-  const navigate = useNavigate();
+
+  // Update tab when location state changes
+  useEffect(() => {
+    if (location.state?.tab === 'signup') {
+      setIsLogin(false);
+      // Clear the state so back button works normally
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [location.state, location.pathname, navigate]);
 
   // Create axios instance with credentials enabled
   const api = axios.create({
@@ -36,24 +49,41 @@ const Auth = ({ onLogin }) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    withCredentials: true // CRITICAL: Enable cookies/sessions
+    withCredentials: true
   });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     
-    // Clear error for this field if user starts typing
     if (errors[name]) {
       setErrors({ ...errors, [name]: '' });
     }
   };
 
   const handleGuestContinue = () => {
-    localStorage.setItem("isAuthenticated", "false");
+    // Create a guest user object
+    const guestUser = {
+      id: 'guest',
+      firstName: 'Guest',
+      lastName: 'User',
+      email: 'guest@eventwear.com',
+      role: 'GUEST',
+      isGuest: true
+    };
+
+    // Store guest session FIRST
+    localStorage.setItem("isAuthenticated", "guest");
     localStorage.setItem("userRole", "GUEST");
-    localStorage.setItem("userEmail", "guest@example.com");
-    navigate('/home'); 
+    localStorage.setItem("userData", JSON.stringify(guestUser));
+
+    // Call onLogin with guest data (this updates App.js state)
+    if (onLogin) {
+      onLogin(guestUser);
+    }
+
+    // Navigate to dashboard
+    navigate('/dashboard');
   };
 
   const validateForm = () => {
@@ -75,7 +105,6 @@ const Auth = ({ onLogin }) => {
     
     // Registration-specific validations
     if (!isLogin) {
-      // First name validation
       if (!formData.firstName.trim()) {
         newErrors.firstName = 'First name is required';
       } else if (!/^[a-zA-Z\s]+$/.test(formData.firstName)) {
@@ -84,7 +113,6 @@ const Auth = ({ onLogin }) => {
         newErrors.firstName = 'First name must be at least 2 characters';
       }
       
-      // Last name validation
       if (!formData.lastName.trim()) {
         newErrors.lastName = 'Last name is required';
       } else if (!/^[a-zA-Z\s]+$/.test(formData.lastName)) {
@@ -93,7 +121,6 @@ const Auth = ({ onLogin }) => {
         newErrors.lastName = 'Last name must be at least 2 characters';
       }
       
-      // Confirm password validation
       if (!formData.confirmPassword) {
         newErrors.confirmPassword = 'Please confirm your password';
       } else if (formData.password !== formData.confirmPassword) {
@@ -123,11 +150,12 @@ const Auth = ({ onLogin }) => {
           password: formData.password
         });
         
-        // Response is now a UserResponse object
         if (response.data && response.data.email) {
-          console.log("Login successful:", response.data);
+          // Store authenticated session
+          localStorage.setItem("isAuthenticated", "true");
+          localStorage.setItem("userRole", response.data.role || "USER");
+          localStorage.setItem("userData", JSON.stringify(response.data));
           
-          // Call the onLogin callback with user data
           if (onLogin) {
             onLogin(response.data);
           }
@@ -150,7 +178,6 @@ const Auth = ({ onLogin }) => {
         if (response.data === "Account securely created.") {
           alert("🎉 Account created successfully! You can now login.");
           
-          // Switch to login view with email pre-filled
           setIsLogin(true);
           setFormData({
             firstName: '',
@@ -160,7 +187,6 @@ const Auth = ({ onLogin }) => {
             confirmPassword: ''
           });
           
-          // Clear errors
           setErrors({});
         } else {
           alert(response.data || "Registration failed. Please try again.");
@@ -169,7 +195,6 @@ const Auth = ({ onLogin }) => {
     } catch (error) {
       console.error("API Error:", error);
       
-      // Enhanced error handling
       if (error.response) {
         const status = error.response.status;
         const errorMessage = error.response.data || "Request failed";

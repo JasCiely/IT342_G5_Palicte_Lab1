@@ -98,17 +98,14 @@ public class AuthController {
             // Set authentication in security context
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            // Create session
+            // Create session and store security context
             HttpSession session = request.getSession(true);
             session.setAttribute("SPRING_SECURITY_CONTEXT", SecurityContextHolder.getContext());
 
             // Get user details
             User user = userService.getUserByEmail(loginRequest.getEmail());
 
-            System.out.println("Login successful for: " + user.getEmail());
-            System.out.println("Session ID: " + session.getId());
-
-            // Return user data
+            // Create user response
             UserResponse userResponse = new UserResponse();
             userResponse.setId(user.getId());
             userResponse.setFirstName(user.getFirstName());
@@ -117,6 +114,12 @@ public class AuthController {
             userResponse.setRole(user.getRole());
             userResponse.setCreatedAt(user.getCreatedAt());
             userResponse.setUpdatedAt(user.getUpdatedAt());
+
+            // IMPORTANT: Store user in session for /check endpoint
+            session.setAttribute("user", userResponse);
+
+            System.out.println("Login successful for: " + user.getEmail());
+            System.out.println("Session ID: " + session.getId());
 
             return ResponseEntity.ok(userResponse);
         } catch (BadCredentialsException e) {
@@ -157,14 +160,28 @@ public class AuthController {
     }
 
     @GetMapping("/check")
-    public ResponseEntity<?> checkAuth() {
+    public ResponseEntity<?> checkAuth(HttpSession session) {
+        System.out.println("=== AUTH CHECK ENDPOINT CALLED ===");
+
         try {
+            // First check session for user data (fastest method)
+            Object userData = session.getAttribute("user");
+
+            if (userData != null && userData instanceof UserResponse) {
+                System.out.println("✅ User found in session: " + ((UserResponse) userData).getEmail());
+                return ResponseEntity.ok(userData);
+            }
+
+            // Fallback: Check Spring Security context
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-            if (authentication != null && authentication.isAuthenticated()
-                    && !authentication.getPrincipal().equals("anonymousUser")) {
+            if (authentication != null &&
+                    authentication.isAuthenticated() &&
+                    !authentication.getPrincipal().equals("anonymousUser")) {
 
                 String email = authentication.getName();
+                System.out.println("✅ User authenticated via Security Context: " + email);
+
                 User user = userService.getUserByEmail(email);
 
                 UserResponse userResponse = new UserResponse();
@@ -176,11 +193,18 @@ public class AuthController {
                 userResponse.setCreatedAt(user.getCreatedAt());
                 userResponse.setUpdatedAt(user.getUpdatedAt());
 
+                // Store in session for next time
+                session.setAttribute("user", userResponse);
+
                 return ResponseEntity.ok(userResponse);
             }
 
+            System.out.println("❌ Not authenticated");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
+
         } catch (Exception e) {
+            System.out.println("❌ Auth check error: " + e.getMessage());
+            e.printStackTrace();
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Not authenticated");
         }
     }

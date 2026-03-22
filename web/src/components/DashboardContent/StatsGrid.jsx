@@ -1,8 +1,50 @@
 import React from 'react';
 import '../css/StatsGrid.css';
 
-const StatsGrid = () => {
-  const stats = [
+const StatsGrid = ({ isGuest = false }) => {
+  const guestStats = [
+    {
+      title: "Available Outfits",
+      value: "500+",
+      footer: "Browse our collection",
+      trend: "Updated daily",
+      trendDirection: "neutral",
+      icon: (
+        <svg className="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z" strokeWidth="1.5"/>
+          <path d="M3 6h18M16 10a4 4 0 0 1-8 0" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
+      )
+    },
+    {
+      title: "Categories",
+      value: "8",
+      footer: "Wedding, Formal, Casual & more",
+      trend: "Something for everyone",
+      trendDirection: "neutral",
+      icon: (
+        <svg className="stat-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <rect x="3" y="3" width="7" height="7" rx="1" strokeWidth="1.5"/>
+          <rect x="14" y="3" width="7" height="7" rx="1" strokeWidth="1.5"/>
+          <rect x="14" y="14" width="7" height="7" rx="1" strokeWidth="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1" strokeWidth="1.5"/>
+        </svg>
+      )
+    },
+    {
+      title: "Sign Up Bonus",
+      value: "100",
+      footer: "Get points on first booking",
+      progress: 0,
+      icon: (
+        <svg className="stat-icon icon-gold" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+          <path d="M12 2l3.09 6.26L22 9.27l-5 4.87L18.18 22 12 18.07 5.82 22 7 14.14 2 9.27l6.91-1.01L12 2z" strokeWidth="1.5"/>
+        </svg>
+      )
+    }
+  ];
+
+  const authenticatedStats = [
     {
       title: "Active Bookings",
       value: "1",
@@ -41,16 +83,20 @@ const StatsGrid = () => {
     }
   ];
 
+  const stats = isGuest ? guestStats : authenticatedStats;
+
   return (
     <section className="stats-container">
       <div className="stats-header">
-        <h2 className="stats-title">Dashboard</h2>
-        <span className="stats-period">Last 30d</span>
+        <h2 className="stats-title">
+          {isGuest ? 'Discover EventWear' : 'Dashboard'}
+        </h2>
+        {!isGuest && <span className="stats-period">Last 30d</span>}
       </div>
       
       <div className="stats-content">
         {stats.map((stat, index) => (
-          <div key={index} className="stat-card">
+          <div key={index} className={`stat-card ${isGuest ? 'guest-card' : ''}`}>
             <div className="stat-header">
               <div className="stat-title-wrapper">
                 <span className="stat-label">{stat.title}</span>
@@ -74,7 +120,7 @@ const StatsGrid = () => {
               </div>
               <div className="stat-footer-content">
                 <span className="stat-footer">{stat.footer}</span>
-                {stat.progress && (
+                {stat.progress !== undefined && (
                   <div className="stat-progress">
                     <div 
                       className="stat-progress-bar" 

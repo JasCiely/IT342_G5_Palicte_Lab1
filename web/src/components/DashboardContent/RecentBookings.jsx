@@ -1,8 +1,33 @@
 import React from 'react';
 import '../css/RecentBookings.css';
 
-const RecentBookings = () => {
-  const bookings = [
+const RecentBookings = ({ isGuest = false, onUpgrade, fullView = false }) => {
+  const sampleGuestBookings = [
+    {
+      id: 1,
+      name: "Elegance Bridal Gown",
+      designer: "Sample Preview",
+      date: "Sign in to book",
+      duration: "3 days",
+      status: "sample",
+      price: "₱5,500/day",
+      imageUrl: "https://images.unsplash.com/photo-1594552072238-b8a33785b261?q=80&w=200",
+      isLocked: true
+    },
+    {
+      id: 2,
+      name: "Midnight Sapphire Gown",
+      designer: "Sample Preview",
+      date: "Sign in to book",
+      duration: "3 days",
+      status: "sample",
+      price: "₱3,200/day",
+      imageUrl: "https://images.unsplash.com/photo-1568252542512-9fe8fe9c87bb?q=80&w=200",
+      isLocked: true
+    }
+  ];
+
+  const authenticatedBookings = [
     {
       id: 1,
       name: "Elegance Bridal Gown",
@@ -11,7 +36,8 @@ const RecentBookings = () => {
       duration: "3 days",
       status: "confirmed",
       price: "₱16,500",
-      imageUrl: "https://images.unsplash.com/photo-1594552072238-b8a33785b261?q=80&w=200"
+      imageUrl: "https://images.unsplash.com/photo-1594552072238-b8a33785b261?q=80&w=200",
+      isLocked: false
     },
     {
       id: 2,
@@ -21,29 +47,53 @@ const RecentBookings = () => {
       duration: "3 days",
       status: "returned",
       price: "₱9,600",
-      imageUrl: "https://images.unsplash.com/photo-1568252542512-9fe8fe9c87bb?q=80&w=200"
+      imageUrl: "https://images.unsplash.com/photo-1568252542512-9fe8fe9c87bb?q=80&w=200",
+      isLocked: false
     }
   ];
+
+  const bookings = isGuest ? sampleGuestBookings : authenticatedBookings;
 
   return (
     <section className="recent-bookings-container">
       <div className="recent-bookings-content">
         <div className="section-header">
           <div className="header-left">
-            <h2>Recent Bookings</h2>
-            <p className="subtitle">Your latest rental activity</p>
+            <h2>{isGuest ? 'Sample Bookings' : 'Recent Bookings'}</h2>
+            <p className="subtitle">
+              {isGuest 
+                ? 'See what your bookings could look like' 
+                : 'Your latest rental activity'
+              }
+            </p>
           </div>
-          <button className="view-all-btn">
-            View All
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-            </svg>
-          </button>
+          {!isGuest && (
+            <button className="view-all-btn">
+              View All
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M6 12L10 8L6 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+              </svg>
+            </button>
+          )}
         </div>
         
-        <div className="booking-list">
+        <div className={`booking-list ${isGuest ? 'guest-mode' : ''}`}>
           {bookings.map((booking) => (
-            <div key={booking.id} className="booking-card">
+            <div 
+              key={booking.id} 
+              className={`booking-card ${booking.isLocked ? 'locked' : ''}`}
+              onClick={booking.isLocked ? onUpgrade : undefined}
+            >
+              {booking.isLocked && (
+                <div className="booking-lock-overlay">
+                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0110 0v4"/>
+                  </svg>
+                  <span>Sign in to book</span>
+                </div>
+              )}
+              
               <div className="booking-image-wrapper">
                 <img src={booking.imageUrl} alt={booking.name} className="item-image" />
                 <span className={`status-indicator ${booking.status}`} />
@@ -55,9 +105,11 @@ const RecentBookings = () => {
                     <h4>{booking.name}</h4>
                     <span className="designer">by {booking.designer}</span>
                   </div>
-                  <span className={`status-badge ${booking.status}`}>
-                    {booking.status === 'confirmed' ? 'Active' : 'Completed'}
-                  </span>
+                  {!booking.isLocked && (
+                    <span className={`status-badge ${booking.status}`}>
+                      {booking.status === 'confirmed' ? 'Active' : 'Completed'}
+                    </span>
+                  )}
                 </div>
                 
                 <div className="booking-details">
@@ -88,9 +140,20 @@ const RecentBookings = () => {
           ))}
         </div>
         
-        <div className="booking-footer">
-          <p>Showing 2 of 12 total bookings</p>
-        </div>
+        {isGuest && (
+          <div className="guest-action-footer">
+            <p>Create an account to start booking premium outfits</p>
+            <button className="create-account-btn" onClick={onUpgrade}>
+              Create Free Account
+            </button>
+          </div>
+        )}
+        
+        {!isGuest && (
+          <div className="booking-footer">
+            <p>Showing 2 of 12 total bookings</p>
+          </div>
+        )}
       </div>
     </section>
   );

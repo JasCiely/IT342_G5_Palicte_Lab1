@@ -1,0 +1,114 @@
+/* Additional styles for PopularPicks.css (AvailableOutfits) - Add these to your existing file */
+
+/* Guest Card Styling */
+.outfit-card.guest-card .image-container {
+  position: relative;
+}
+
+.guest-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(102, 126, 234, 0.95);
+  backdrop-filter: blur(4px);
+  padding: 12px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.outfit-card:hover .guest-overlay {
+  opacity: 1;
+}
+
+.guest-overlay svg {
+  color: white;
+  animation: sparkle 1.5s ease-in-out infinite;
+}
+
+.guest-overlay span {
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.1) rotate(15deg);
+    opacity: 0.8;
+  }
+}
+
+.btn-book.guest-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-book.guest-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.btn-book.guest-btn:hover::before {
+  left: 100%;
+}
+
+.btn-book.guest-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-book.guest-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Make guest cards slightly more prominent */
+.outfit-card.guest-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+}
+
+.outfit-card.guest-card:hover .image-container img {
+  transform: scale(1.08);
+}
+
+@media (max-width: 768px) {
+  .guest-overlay {
+    opacity: 1;
+    font-size: 12px;
+    padding: 10px 16px;
+  }
+
+  .guest-overlay svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .btn-book.guest-btn {
+    font-size: 13px;
+    padding: 10px 16px;
+  }
+}
