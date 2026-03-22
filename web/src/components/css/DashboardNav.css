@@ -1,15 +1,15 @@
+/* DashboardNav.css - Matching Auth Design */
 .dashboard-nav-container {
-  background: #f8f7f4;
-  /* Side padding must match .dashboard-header */
+  background: linear-gradient(135deg, #f8f7f5 0%, #f0edea 50%, #e8e5e1 100%);
   padding: 0.5rem 4rem 1.5rem 4rem; 
+  border-bottom: 1px solid #e8e5e1;
 }
 
 .dashboard-nav-content {
-  /* Must match .dashboard-header-content exactly */
   max-width: 1400px;
   margin: 0 auto;
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
   align-items: center;
 }
 
@@ -17,46 +17,157 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.6rem 1rem;
-  border-radius: 8px;
-  font-size: 0.9rem;
-  font-weight: 500;
-  color: #666666;
+  padding: 12px 20px;
+  border-radius: 14px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #94a3b8;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: 1px solid transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
   background: transparent;
+  text-transform: capitalize;
+  letter-spacing: 0.3px;
 }
 
-/* FIX: This pulls the first item left to align with the text above */
+/* Align first item with content above */
 .nav-item:first-child {
-  margin-left: -1rem;
+  margin-left: -20px;
 }
 
 .nav-item svg {
   width: 16px;
   height: 16px;
-  color: #888;
-}
-
-.nav-item.active {
-  background: #ffffff;
-  color: #1a1a1a;
-  border: 1px solid #eeeeee;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  color: #a0aec0;
+  transition: color 0.3s ease;
 }
 
 .nav-item:hover:not(.active) {
-  color: #333;
-  background: #f5f5f5;
+  color: #6B2D39;
+  background: rgba(255, 255, 255, 0.5);
+  transform: translateY(-1px);
+}
+
+.nav-item:hover:not(.active) svg {
+  color: #6B2D39;
+  transform: scale(1.05);
+}
+
+.nav-item.active {
+  background: white;
+  color: #6B2D39;
+  border: 2px solid #e2e8f0;
+  box-shadow: 
+    0 6px 20px rgba(107, 45, 57, 0.15),
+    0 3px 10px rgba(107, 45, 57, 0.1);
+  transform: translateY(-2px);
+}
+
+.nav-item.active svg {
+  color: #6B2D39;
+}
+
+/* Guest Mode Styles */
+.nav-item.guest-locked {
+  opacity: 0.6;
+  position: relative;
+  cursor: pointer;
+}
+
+.nav-item.guest-locked:hover {
+  opacity: 0.8;
+}
+
+.lock-icon {
+  width: 12px;
+  height: 12px;
+  margin-left: 4px;
+  opacity: 0.7;
+}
+
+.nav-item-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Tooltip for locked items - Matching Auth style */
+.nav-item.guest-locked::after {
+  content: "Sign in required";
+  position: absolute;
+  bottom: -45px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  background: #2d3748;
+  color: white;
+  padding: 8px 14px;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-item.guest-locked:hover::after {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
+}
+
+/* Arrow for tooltip */
+.nav-item.guest-locked::before {
+  content: "";
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 0;
+  height: 0;
+  border-left: 7px solid transparent;
+  border-right: 7px solid transparent;
+  border-bottom: 7px solid #2d3748;
+  opacity: 0;
+  transition: all 0.2s ease;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.nav-item.guest-locked:hover::before {
+  transform: translateX(-50%) scale(1);
+  opacity: 1;
 }
 
 @media (max-width: 768px) {
   .dashboard-nav-container {
     padding: 0.5rem 1.5rem 1rem 1.5rem;
     overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
   }
+  
+  .dashboard-nav-content {
+    gap: 0.5rem;
+  }
+  
   .nav-item:first-child {
-    margin-left: 0; /* Reset for mobile spacing */
+    margin-left: 0;
+  }
+  
+  .nav-item {
+    white-space: nowrap;
+    padding: 10px 16px;
+    font-size: 12px;
+  }
+  
+  /* Hide tooltips on mobile */
+  .nav-item.guest-locked::after,
+  .nav-item.guest-locked::before {
+    display: none;
   }
 }
